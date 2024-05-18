@@ -1,20 +1,20 @@
+#include "msg_topics_pkg/Person.h"
 #include "ros/ros.h"
-#include "std_msgs/String.h"
 
-void chatterCallback(const std_msgs::String::ConstPtr &msg)
+void Callback(const msg_topics_pkg::Person::ConstPtr &person_p)
 {
-    ROS_INFO("I heard: [%s]", msg->data.c_str());
+    ROS_INFO("info come in:%s, %d, %.2f", person_p->name.c_str(), person_p->age, person_p->height);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
 
     ros::init(argc, argv, "listener");
     ros::NodeHandle n;
+    ros::Subscriber sub = n.subscribe<msg_topics_pkg::Person>("chatter", 10, Callback);
 
-    ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
+    // 4.回调函数中处理 person
 
     ros::spin();
-
     return 0;
 }
